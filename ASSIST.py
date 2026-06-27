@@ -7,16 +7,17 @@ from sklearn.metrics import accuracy_score, classification_report
 
 # 1. Load the Kaggle Bitext Customer Support Dataset
 print("Loading dataset...")
-csv_name = '20000-Utterances-Training-dataset.csv'
-csv_path = csv_name
+script_dir = os.path.dirname(os.path.abspath(__file__))
+# Try to resolve path relative to script directory first
+csv_path = os.path.join(script_dir, 'dataset', 'Bitext_Sample_Customer_Service_Training_Dataset', 'Training', 'Bitext_Sample_Customer_Service_Training_Dataset.csv')
+
+# Fallbacks if the workspace structure differs or the dataset is moved
 if not os.path.exists(csv_path):
-    desktop_fallback = os.path.expanduser(r'~\Desktop\AI_Virtual_Assistant\20000-Utterances-Training-dataset.csv')
-    if os.path.exists(desktop_fallback):
-        csv_path = desktop_fallback
-    else:
-        script_relative_fallback = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Desktop', 'AI_Virtual_Assistant', '20000-Utterances-Training-dataset.csv')
-        if os.path.exists(script_relative_fallback):
-            csv_path = script_relative_fallback
+    csv_path = os.path.join(script_dir, 'Bitext_Sample_Customer_Service_Training_Dataset.csv')
+if not os.path.exists(csv_path):
+    csv_path = 'Bitext_Sample_Customer_Service_Training_Dataset.csv'
+if not os.path.exists(csv_path):
+    csv_path = '20000-Utterances-Training-dataset.csv'
 
 df = pd.read_csv(csv_path)
 
@@ -59,6 +60,6 @@ def predict_intent(user_input):
     return prediction[0]
 
 # Simulated User Test
-test_query = "I don't have a fucking shipping address, what do i have to do to set it up?"
+test_query = "where is my order?"
 print(f"\nSimulated Query: '{test_query}'")
 print(f"Predicted Intent: '{predict_intent(test_query)}'")
